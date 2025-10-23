@@ -17,12 +17,14 @@ return {
       local autopairs = require("nvim-autopairs")
       autopairs.setup(opts)
 
-      -- ✅ Ensure CMP integration (without double-calling)
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      local cmp = require("cmp")
+      local ok, cmp = pcall(require, "cmp")
+      if ok then
+        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
-      cmp.event:off("confirm_done", cmp_autopairs.on_confirm_done()) -- clear existing
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        -- ensure no duplicate event hooks
+        cmp.event:off("confirm_done", cmp_autopairs.on_confirm_done())
+        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      end
     end,
   },
 }
