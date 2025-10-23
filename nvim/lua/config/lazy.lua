@@ -1,4 +1,7 @@
+-- Declare the path where lazy will clone the plugin code
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+-- Validate cloning Lazy status
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -12,6 +15,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
+
+-- Add the path to the lazy plugin repositories to the vim runtime path
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
